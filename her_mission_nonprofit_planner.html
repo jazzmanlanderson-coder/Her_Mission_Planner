@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Her Mission — Nonprofit Planner | McLean County, IL</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-light: #EEEDFE;
+    --purple-mid: #7F77DD;
+    --purple-dark: #3C3489;
+    --purple-deep: #26215C;
+    --teal-light: #E1F5EE;
+    --teal-mid: #1D9E75;
+    --teal-dark: #085041;
+    --pink-light: #FBEAF0;
+    --pink-mid: #D4537E;
+    --pink-dark: #72243E;
+    --amber-light: #FAEEDA;
+    --amber-mid: #BA7517;
+    --amber-dark: #633806;
+    --blue-light: #E6F1FB;
+    --blue-mid: #378ADD;
+    --blue-dark: #0C447C;
+    --coral-light: #FAECE7;
+    --coral-dark: #712B13;
+    --gray-bg: #F7F6F3;
+    --white: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #5a5a72;
+    --text-muted: #8a8aa0;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.14);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-bg);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #26215C 0%, #533AB7 60%, #D4537E 100%);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .site-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.6rem;
+    color: #fff;
+    position: relative;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+  }
+  .site-header h1 em { color: #f9c4d6; font-style: italic; }
+  .site-header p {
+    color: rgba(255,255,255,0.82);
+    font-size: 1rem;
+    max-width: 560px;
+    margin: 0 auto 1.25rem;
+    position: relative;
+  }
+  .location-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 999px;
+    position: relative;
+  }
+
+  /* ── NAV TABS ── */
+  .tabs-wrapper {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .tabs {
+    display: flex; overflow-x: auto; gap: 0;
+    max-width: 900px; margin: 0 auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    padding: 1rem 1.25rem;
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active { color: var(--purple-dark); border-bottom-color: var(--purple-dark); }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 1.1rem; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .b-purple { background: var(--purple-light); color: var(--purple-dark); }
+  .b-teal   { background: var(--teal-light);   color: var(--teal-dark); }
+  .b-pink   { background: var(--pink-light);   color: var(--pink-dark); }
+  .b-amber  { background: var(--amber-light);  color: var(--amber-dark); }
+  .b-blue   { background: var(--blue-light);   color: var(--blue-dark); }
+  .b-coral  { background: var(--coral-light);  color: var(--coral-dark); }
+
+  /* ── STEPS ── */
+  .step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 1.1rem; }
+  .step-num {
+    min-width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--purple-light);
+    color: var(--purple-dark);
+    font-size: 0.8rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-body h4 { font-size: 0.93rem; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+  .step-body p  { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; }
+
+  /* ── PHASE HEADER ── */
+  .phase-bar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1rem; padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-icon {
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .phase-bar h3 { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--text-primary); }
+  .phase-bar .tag {
+    margin-left: auto; font-size: 0.72rem; font-weight: 500;
+    padding: 2px 10px; border-radius: 999px;
+    background: var(--purple-light); color: var(--purple-dark);
+  }
+
+  /* ── CHECKLIST ── */
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type=checkbox] { margin-top: 2px; accent-color: var(--purple-mid); width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; }
+  .check-item label { font-size: 0.88rem; color: var(--text-secondary); cursor: pointer; line-height: 1.5; }
+  .check-item input:checked + label { text-decoration: line-through; opacity: 0.5; }
+
+  /* ── GRID ── */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+  .metric {
+    background: var(--gray-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.1rem; text-align: center;
+  }
+  .metric-val { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--purple-dark); }
+  .metric-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── ADVICE / COMMUNITY ── */
+  .advice-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .advisor-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem; font-weight: 600; flex-shrink: 0;
+  }
+  .av-purple { background: var(--purple-light); color: var(--purple-dark); }
+  .av-teal   { background: var(--teal-light);   color: var(--teal-dark); }
+  .av-pink   { background: var(--pink-light);   color: var(--pink-dark); }
+  .av-amber  { background: var(--amber-light);  color: var(--amber-dark); }
+  .advisor-name { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); }
+  .advisor-title { font-size: 0.78rem; color: var(--text-muted); }
+  .quote {
+    font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65;
+    border-left: 3px solid var(--purple-mid);
+    padding-left: 12px; margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ── RESOURCES ── */
+  .resource-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+    transition: background .12s;
+    border-radius: 4px;
+  }
+  .resource-row:last-child { border-bottom: none; }
+  .resource-row:hover { background: var(--gray-bg); padding-left: 6px; }
+  .resource-row .res-icon { color: var(--purple-mid); font-size: 0.9rem; flex-shrink: 0; }
+  .resource-row .res-name { font-size: 0.88rem; color: var(--text-primary); font-weight: 500; flex: 1; }
+  .resource-row .res-domain { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── LOCAL ORGS ── */
+  .local-org {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex; gap: 14px; align-items: flex-start;
+    box-shadow: var(--shadow-sm);
+  }
+  .org-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 5px;
+  }
+  .org-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+  .org-addr { font-size: 0.8rem; color: var(--text-muted); margin: 1px 0 4px; }
+  .org-note { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+  .org-phone { font-size: 0.8rem; color: var(--purple-mid); font-weight: 500; margin-top: 4px; }
+  .org-category {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 2px 8px; border-radius: 999px; margin-bottom: 4px;
+  }
+
+  /* ── TEXTAREA & BUTTON ── */
+  textarea {
+    width: 100%; border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md); padding: 10px 12px;
+    font-size: 0.88rem; font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary); background: var(--white);
+    resize: vertical; min-height: 80px; outline: none;
+    transition: border-color .15s;
+  }
+  textarea:focus { border-color: var(--purple-mid); }
+  .btn-primary {
+    margin-top: 10px; padding: 9px 20px;
+    background: var(--purple-dark); color: #fff;
+    border: none; border-radius: var(--radius-md);
+    font-size: 0.88rem; font-weight: 500;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: var(--purple-deep); }
+  .btn-secondary {
+    font-size: 0.8rem; padding: 6px 14px;
+    background: none; border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm); color: var(--text-secondary);
+    cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 8px;
+    transition: background .12s;
+  }
+  .btn-secondary:hover { background: var(--gray-bg); }
+
+  /* ── COMMUNITY POSTS ── */
+  .community-post {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+  }
+  .post-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .post-you { width: 28px; height: 28px; border-radius: 50%; background: var(--pink-light); color: var(--pink-dark); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; }
+  .post-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+  .post-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; border-left: 3px solid #f0c8d8; padding-left: 10px; font-style: italic; }
+
+  /* ── ILLINOIS NOTE ── */
+  .il-note {
+    background: linear-gradient(135deg, var(--blue-light), var(--purple-light));
+    border: 1px solid #b5c8f4;
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem; color: var(--blue-dark);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .il-note .il-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  ul.checklist { list-style: none; padding: 0; }
+  ul.plain { padding-left: 1.25rem; }
+  ul.plain li { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; line-height: 1.55; }
+
+  .section-intro { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 2rem 1rem;
+    font-size: 0.78rem; color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: var(--white);
+  }
+  footer strong { color: var(--purple-dark); }
+
+  @media (max-width: 600px) {
+    .site-header h1 { font-size: 1.8rem; }
+    .main { padding: 1.25rem 1rem 3rem; }
+    .card { padding: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Her <em>Mission</em> Nonprofit Planner</h1>
+  <p>A complete guide to starting and running a nonprofit serving women, children, and families in need — from first steps to full operation.</p>
+  <span class="location-badge">📍 McLean County, Illinois</span>
+</header>
+
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('roadmap', this)">🗺 Roadmap</button>
+    <button class="tab" onclick="switchTab('checklist', this)">✅ Checklist</button>
+    <button class="tab" onclick="switchTab('programs', this)">💜 Programs</button>
+    <button class="tab" onclick="switchTab('funding', this)">💰 Funding</button>
+    <button class="tab" onclick="switchTab('local', this)">📍 McLean County</button>
+    <button class="tab" onclick="switchTab('illinois', this)">🏛 Illinois Steps</button>
+    <button class="tab" onclick="switchTab('community', this)">💬 Community Advice</button>
+    <button class="tab" onclick="switchTab('resources', this)">📚 Resources</button>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- ══ ROADMAP ══ -->
+  <div id="roadmap" class="section active">
+    <div class="card">
+      <div class="phase-bar">
+        <div class="phase-icon" style="background:#EEEDFE;">🏗</div>
+        <h3>Phase 1 — Foundation (Months 1–3)</h3>
+        <span class="tag">Start here</span>
+      </div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Define your mission & vision</h4><p>Write a clear 1–2 sentence mission statement. Who do you serve? How do you serve them? Keep it focused — domestic violence survivors, foster children, runaway youth, and families in need through mentorship, drives, and outreach.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Choose a name & check availability</h4><p>Search the Illinois Secretary of State business registry (ilsos.gov) and the USPTO trademark database. Make sure your name is unique and available as a .org domain.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Recruit founding board members</h4><p>Aim for 3–7 board members. Seek women in law, finance, social work, education, and community organizing in McLean County. Illinois requires a minimum of 3 directors for a nonprofit corporation.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>File Articles of Incorporation with Illinois</h4><p>File with the Illinois Secretary of State. Cost is $50. You can file online at ilsos.gov or in person at 1510 W Market St, Bloomington. Choose "Not-for-Profit Corporation."</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Draft and adopt bylaws</h4><p>Bylaws govern how your org operates — board meetings, voting, officer roles, and conflict of interest policies. Illinois requires bylaws. Use the Illinois Attorney General's nonprofit resources for free templates.</p></div></div>
+    </div>
+
+    <div class="card">
+      <div class="phase-bar">
+        <div class="phase-icon" style="background:#E1F5EE;">📋</div>
+        <h3>Phase 2 — Legal & Tax Status (Months 2–4)</h3>
+      </div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><h4>Apply for your EIN</h4><p>Free and instant at IRS.gov. Required before opening a bank account or filing for 501(c)(3) status. Apply online — you'll get your number immediately.</p></div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-body"><h4>File IRS Form 1023 or 1023-EZ</h4><p>This is your federal tax-exempt status application. 1023-EZ (for orgs expecting under $50k/year) costs $275 and is faster. Full 1023 costs $600. Approval typically takes 3–6 months.</p></div></div>
+      <div class="step"><div class="step-num">8</div><div class="step-body"><h4>Register with Illinois Attorney General</h4><p>Illinois law requires registration with the IL AG Charitable Trust Bureau before soliciting donations in the state. File Form CO-1 (charitable organization registration). Annual renewal required.</p></div></div>
+      <div class="step"><div class="step-num">9</div><div class="step-body"><h4>Open a dedicated nonprofit bank account</h4><p>Never co-mingle nonprofit and personal funds. Bring your EIN, Articles of Incorporation, and bylaws. Heartland Credit Union and local banks in Bloomington-Normal are good options.</p></div></div>
+      <div class="step"><div class="step-num">10</div><div class="step-body"><h4>Get Directors & Officers (D&O) insurance</h4><p>Protects your board members from personal liability. Nonprofit liability insurance is especially important when serving vulnerable populations like children and DV survivors.</p></div></div>
+    </div>
+
+    <div class="card">
+      <div class="phase-bar">
+        <div class="phase-icon" style="background:#FBEAF0;">🚀</div>
+        <h3>Phase 3 — Launch & Grow (Months 4–12)</h3>
+      </div>
+      <div class="step"><div class="step-num">11</div><div class="step-body"><h4>Build your online presence</h4><p>Create a website with a donation button. Apply for Google Ad Grants ($10,000/month in free ads) and Canva for Nonprofits. Set up social media — Facebook and Instagram are key for McLean County community reach.</p></div></div>
+      <div class="step"><div class="step-num">12</div><div class="step-body"><h4>Launch your first program</h4><p>Start with one school supply drive or one mentorship cohort. Partner with YWCA Labyrinth or the Baby Fold rather than duplicating existing work. Document everything for future grant applications.</p></div></div>
+      <div class="step"><div class="step-num">13</div><div class="step-body"><h4>Apply for grants & build your donor base</h4><p>Begin with Illinois Prairie Community Foundation and United Way of McLean County. Build relationships before submitting formal applications. Start a monthly donor program early.</p></div></div>
+      <div class="step"><div class="step-num">14</div><div class="step-body"><h4>Establish community partnerships</h4><p>Connect with YWCA Labyrinth (DV), Baby Fold (foster care), Salvation Army Safe Harbor (runaway youth), McLean County schools (supply drives), and Mid Central Community Action (family services).</p></div></div>
+    </div>
+  </div>
+
+  <!-- ══ CHECKLIST ══ -->
+  <div id="checklist" class="section">
+    <div class="card">
+      <span class="badge b-purple">Legal & Formation</span>
+      <ul class="checklist">
+        <li class="check-item"><input type="checkbox" id="c1"><label for="c1">Write mission and vision statements</label></li>
+        <li class="check-item"><input type="checkbox" id="c2"><label for="c2">Choose and verify organization name (IL Secretary of State + USPTO)</label></li>
+        <li class="check-item"><input type="checkbox" id="c3"><label for="c3">Recruit 3–7 founding board members</label></li>
+        <li class="check-item"><input type="checkbox" id="c4"><label for="c4">File Articles of Incorporation with Illinois ($50 at ilsos.gov)</label></li>
+        <li class="check-item"><input type="checkbox" id="c5"><label for="c5">Draft and adopt nonprofit bylaws</label></li>
+        <li class="check-item"><input type="checkbox" id="c6"><label for="c6">Apply for EIN at IRS.gov (free, instant)</label></li>
+        <li class="check-item"><input type="checkbox" id="c7"><label for="c7">File Form 1023 or 1023-EZ for 501(c)(3) status</label></li>
+        <li class="check-item"><input type="checkbox" id="c8"><label for="c8">Register with Illinois AG Charitable Trust Bureau (Form CO-1)</label></li>
+        <li class="check-item"><input type="checkbox" id="c9"><label for="c9">Open dedicated nonprofit bank account</label></li>
+        <li class="check-item"><input type="checkbox" id="c10"><label for="c10">Get D&O liability insurance for board and nonprofit</label></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge b-teal">Operations & Programs</span>
+      <ul class="checklist">
+        <li class="check-item"><input type="checkbox" id="c11"><label for="c11">Set up accounting software (QuickBooks Nonprofit or Wave)</label></li>
+        <li class="check-item"><input type="checkbox" id="c12"><label for="c12">Create conflict of interest policy (Illinois requires this)</label></li>
+        <li class="check-item"><input type="checkbox" id="c13"><label for="c13">Develop volunteer handbook and application form</label></li>
+        <li class="check-item"><input type="checkbox" id="c14"><label for="c14">Establish intake/referral process for program participants</label></li>
+        <li class="check-item"><input type="checkbox" id="c15"><label for="c15">Create data tracking system for participant outcomes</label></li>
+        <li class="check-item"><input type="checkbox" id="c16"><label for="c16">Run background checks on all volunteers working with children</label></li>
+        <li class="check-item"><input type="checkbox" id="c17"><label for="c17">Complete mandatory reporter training (required in Illinois for those working with minors)</label></li>
+        <li class="check-item"><input type="checkbox" id="c18"><label for="c18">Develop safe messaging guidelines for DV survivors</label></li>
+        <li class="check-item"><input type="checkbox" id="c19"><label for="c19">File annual report with Illinois AG each year</label></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge b-pink">Fundraising & Outreach</span>
+      <ul class="checklist">
+        <li class="check-item"><input type="checkbox" id="c20"><label for="c20">Build website with donation button</label></li>
+        <li class="check-item"><input type="checkbox" id="c21"><label for="c21">Apply for Google Ad Grant ($10k/month free ads)</label></li>
+        <li class="check-item"><input type="checkbox" id="c22"><label for="c22">Register on Candid / GuideStar for credibility</label></li>
+        <li class="check-item"><input type="checkbox" id="c23"><label for="c23">Identify 3 local McLean County grants to apply for first</label></li>
+        <li class="check-item"><input type="checkbox" id="c24"><label for="c24">Schedule introductory meeting with Illinois Prairie Community Foundation</label></li>
+        <li class="check-item"><input type="checkbox" id="c25"><label for="c25">Schedule introductory meeting with United Way of McLean County</label></li>
+        <li class="check-item"><input type="checkbox" id="c26"><label for="c26">Plan first school supply drive (partner with Unit 5 or BPS 101 schools)</label></li>
+        <li class="check-item"><input type="checkbox" id="c27"><label for="c27">Reach out to YWCA Labyrinth to explore partnership</label></li>
+        <li class="check-item"><input type="checkbox" id="c28"><label for="c28">Plan first community resource fair in Bloomington-Normal</label></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ PROGRAMS ══ -->
+  <div id="programs" class="section">
+    <div class="card">
+      <span class="badge b-pink">Domestic Violence Support</span>
+      <div class="card-title"><span class="icon">🛡</span> Women's Safety & Recovery Mentorship</div>
+      <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.75rem;">Partner with YWCA Labyrinth (Bloomington's existing DV resource center) to fill gaps rather than duplicate services. Focus on what they don't already offer.</p>
+      <ul class="plain">
+        <li>1-on-1 mentorship matching with trained community women</li>
+        <li>Financial literacy and budgeting workshops</li>
+        <li>Job readiness coaching and resume help</li>
+        <li>Safe housing navigation and referrals</li>
+        <li>Childcare connections during recovery period</li>
+        <li>Safe messaging and trauma-informed communication training for mentors</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge b-teal">Foster & Runaway Youth</span>
+      <div class="card-title"><span class="icon">🏡</span> Youth Stability & Mentorship Program</div>
+      <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.75rem;">Partner with the Baby Fold (Normal) for foster youth referrals and Salvation Army Safe Harbor for runaway youth. Youth aging out of foster care are especially vulnerable in McLean County.</p>
+      <ul class="plain">
+        <li>MENTOR-certified mentor matching model</li>
+        <li>Life skills: budgeting, cooking, job searching, renting</li>
+        <li>Emergency supply kits: hygiene, clothing, school supplies</li>
+        <li>Safe space drop-in hours and peer support groups</li>
+        <li>Connection to Heartland Community College programs and scholarships</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge b-amber">School Supply Drives</span>
+      <div class="card-title"><span class="icon">🎒</span> Back-to-School & Year-Round Supply Drives</div>
+      <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.75rem;">McLean County has two school districts — BPS 101 (Bloomington) and Unit 5 (Normal). Partner with school counselors to identify highest-need students.</p>
+      <ul class="plain">
+        <li>Partner with local churches, businesses, and Walmart/Target for drop-off sites</li>
+        <li>Create an Amazon wishlist and share on social media</li>
+        <li>Coordinate with BPS 101 and Unit 5 district counselors</li>
+        <li>Expand to winter coat drives, hygiene drives, and holiday toy drives year-round</li>
+        <li>Ask Heartland Community College student groups to volunteer</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge b-blue">Community Outreach</span>
+      <div class="card-title"><span class="icon">🏘</span> Family Resource Fairs</div>
+      <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.75rem;">Host quarterly fairs that bring services directly to families — housing, food, healthcare, legal aid, and childcare all in one place. McLean County has strong agency partners ready to participate.</p>
+      <ul class="plain">
+        <li>Partner with Mid Central Community Action, FCRC, Salvation Army, and YWCA Labyrinth</li>
+        <li>Offer free food, children's activities, and door prizes to boost attendance</li>
+        <li>Collect intake forms to build your service database</li>
+        <li>Invite WGLT, Pantagraph, and local TV news to grow awareness</li>
+        <li>Consider locations: Bloomington Public Library, Salvation Army, or church community rooms</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ FUNDING ══ -->
+  <div id="funding" class="section">
+    <div class="grid2">
+      <div class="metric"><div class="metric-val">$275</div><div class="metric-label">1023-EZ IRS filing fee</div></div>
+      <div class="metric"><div class="metric-val">$50</div><div class="metric-label">IL Articles of Incorporation</div></div>
+      <div class="metric"><div class="metric-val">$10K</div><div class="metric-label">Google Ad Grant/month</div></div>
+      <div class="metric"><div class="metric-val">3–6 mo</div><div class="metric-label">501(c)(3) approval time</div></div>
+    </div>
+
+    <div class="card">
+      <span class="badge b-teal">Local McLean County Grants — Start Here</span>
+      <div class="step"><div class="step-num" style="background:#E1F5EE;color:#085041;">1</div><div class="step-body"><h4>Illinois Prairie Community Foundation</h4><p>915 E Washington St, Bloomington — 309-662-4477. Your first call. Rated 5 stars, known for supporting emerging nonprofits in McLean County. Visit ilprairiecf.org for grant cycles.</p></div></div>
+      <div class="step"><div class="step-num" style="background:#E1F5EE;color:#085041;">2</div><div class="step-body"><h4>United Way of McLean County</h4><p>309-828-7383 — uwmclean.org. Actively funds youth-focused programs and poverty reduction. Build a relationship before applying. Attend their community events first.</p></div></div>
+      <div class="step"><div class="step-num" style="background:#E1F5EE;color:#085041;">3</div><div class="step-body"><h4>State Farm Companies Foundation</h4><p>State Farm is headquartered in Bloomington-Normal. Their Good Neighbor Citizenship program funds community organizations. Especially strong for education and safety programs.</p></div></div>
+      <div class="step"><div class="step-num" style="background:#E1F5EE;color:#085041;">4</div><div class="step-body"><h4>Country Financial Foundation</h4><p>Also headquartered in Bloomington. Focuses on community betterment, youth, and family programs. Great fit for your mission.</p></div></div>
+    </div>
+
+    <div class="card">
+      <span class="badge b-purple">State & Federal Grants</span>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Illinois Children's Mental Health Partnership</h4><p>State funding for programs serving children's social-emotional wellbeing. Relevant for foster youth and DV-affected children.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>VAWA / Office on Violence Against Women</h4><p>Federal funding for DV programs. Competitive — pursue in year 2 or 3 once you have documented outcomes. Apply through Illinois Criminal Justice Information Authority (ICJIA).</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>DCFS Community Services Grants</h4><p>Illinois DCFS funds community organizations that support children and families. Especially relevant for your foster youth and family mentorship programs.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>CDBG (Community Development Block Grants)</h4><p>Available through the City of Bloomington and McLean County for programs that serve low-to-moderate income residents.</p></div></div>
+    </div>
+
+    <div class="card">
+      <span class="badge b-amber">Free Tools & In-Kind Support</span>
+      <ul class="plain">
+        <li><strong>TechSoup</strong> — discounted Microsoft 365, Zoom, Adobe, Salesforce for nonprofits</li>
+        <li><strong>Canva for Nonprofits</strong> — free professional design tools</li>
+        <li><strong>Google for Nonprofits</strong> — free Workspace + $10K/month in Google Ads</li>
+        <li><strong>Heartland Community College</strong> — free meeting space and volunteer pool</li>
+        <li><strong>SCORE Bloomington-Normal Chapter</strong> — free business mentorship for nonprofits</li>
+        <li><strong>Illinois Nonprofit Principles & Practices</strong> — free guidance from Donors Forum</li>
+        <li><strong>Local churches and businesses</strong> — in-kind donations, supply drives, event space</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ LOCAL MCLEAN COUNTY ══ -->
+  <div id="local" class="section">
+    <p class="section-intro">These are the real organizations right here in Bloomington-Normal that she should call, partner with, or reference when building her network. Reach out in order of priority.</p>
+
+    <div class="card" style="border-left: 4px solid var(--pink-mid);">
+      <div class="badge b-pink">Domestic Violence</div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:0;">
+        <div class="org-dot" style="background:var(--pink-mid);"></div>
+        <div>
+          <div class="org-name">YWCA Labyrinth</div>
+          <div class="org-addr">616 W Monroe St, Bloomington, IL 61701</div>
+          <div class="org-note">Bloomington's primary DV residential and outreach program with mentors. Rated 5 stars. Partner with them first — fill gaps rather than duplicate their services. They have a mentor program you can collaborate with.</div>
+          <div class="org-phone">☎ 309-319-2426 · ywcamclean.org</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--teal-mid);">
+      <div class="badge b-teal">Foster Care & Child Welfare</div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:0;">
+        <div class="org-dot" style="background:var(--teal-mid);"></div>
+        <div>
+          <div class="org-name">The Baby Fold</div>
+          <div class="org-addr">108 E Willow St, Normal, IL 61761</div>
+          <div class="org-note">Licensed foster care, child welfare, and family services agency. Key partner for your foster youth mentorship program. They can refer youth aging out of the system to your services.</div>
+          <div class="org-phone">☎ 309-452-1170 · thebabyfold.org</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--purple-mid);">
+      <div class="badge b-purple">Funding — First Stop</div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:.75rem;">
+        <div class="org-dot" style="background:var(--purple-mid);"></div>
+        <div>
+          <div class="org-name">Illinois Prairie Community Foundation</div>
+          <div class="org-addr">915 E Washington St #2, Bloomington, IL 61701</div>
+          <div class="org-note">5-star rated local grant-maker. Known for being welcoming to emerging nonprofits. Call and introduce yourself before the next grant cycle opens.</div>
+          <div class="org-phone">☎ 309-662-4477 · ilprairiecf.org</div>
+        </div>
+      </div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:0;">
+        <div class="org-dot" style="background:var(--purple-mid);"></div>
+        <div>
+          <div class="org-name">United Way of McLean County</div>
+          <div class="org-addr">Bloomington, IL 61702</div>
+          <div class="org-note">Local United Way chapter actively focused on youth escaping poverty. Build a relationship and attend their events before applying for funding.</div>
+          <div class="org-phone">☎ 309-828-7383 · uwmclean.org</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--amber-mid);">
+      <div class="badge b-amber">Emergency Shelter & Family Services</div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:.75rem;">
+        <div class="org-dot" style="background:var(--amber-mid);"></div>
+        <div>
+          <div class="org-name">Salvation Army Safe Harbor Shelter</div>
+          <div class="org-addr">601 W Washington St, Bloomington, IL 61701</div>
+          <div class="org-note">Open 24/7. Serves homeless, runaway youth, and housing-insecure families. Natural referral partner — people who come to them can be connected to your mentorship programs.</div>
+          <div class="org-phone">☎ 309-829-9476 ext. 209</div>
+        </div>
+      </div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:0;">
+        <div class="org-dot" style="background:var(--amber-mid);"></div>
+        <div>
+          <div class="org-name">Mid Central Community Action</div>
+          <div class="org-addr">1301 W Washington St, Bloomington, IL 61701</div>
+          <div class="org-note">Emergency assistance, utility help, and family services. Invite to your community resource fairs and build a referral relationship with their case managers.</div>
+          <div class="org-phone">☎ 309-829-0691 · mccainc.org</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--blue-mid);">
+      <div class="badge b-blue">Education & Volunteers</div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:.75rem;">
+        <div class="org-dot" style="background:var(--blue-mid);"></div>
+        <div>
+          <div class="org-name">Heartland Community College</div>
+          <div class="org-addr">1500 W Raab Rd, Normal, IL 61761</div>
+          <div class="org-note">Excellent source of volunteers, meeting space, and workforce training partnerships for women you serve. Reach out to their social work, nursing, and early childhood programs.</div>
+          <div class="org-phone">☎ 309-268-8000 · heartland.edu</div>
+        </div>
+      </div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:0;">
+        <div class="org-dot" style="background:var(--blue-mid);"></div>
+        <div>
+          <div class="org-name">Family Community Resource Center (FCRC)</div>
+          <div class="org-addr">509 W Washington St, Bloomington, IL 61701</div>
+          <div class="org-note">Family advocacy and referral services. Good referral partner and potential collaborator for resource fairs.</div>
+          <div class="org-phone">☎ 309-821-1616 · thefcrc.org</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #888;">
+      <div class="badge" style="background:#F1EFE8;color:#444;">Filing Location</div>
+      <div class="local-org" style="border:none;padding:0;box-shadow:none;margin-bottom:0;">
+        <div class="org-dot" style="background:#888;"></div>
+        <div>
+          <div class="org-name">Illinois Secretary of State — Bloomington</div>
+          <div class="org-addr">1510 W Market St, Bloomington, IL 61701</div>
+          <div class="org-note">Where to file your Articles of Incorporation in person. Open Mon–Fri 7:30 AM–5:00 PM, Sat 7:30 AM–12:00 PM. Can also file online at ilsos.gov.</div>
+          <div class="org-phone">☎ 309-827-3531</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ILLINOIS STEPS ══ -->
+  <div id="illinois" class="section">
+    <div class="il-note">
+      <span class="il-icon">ℹ️</span>
+      <div>Illinois has specific nonprofit requirements beyond the federal IRS process. Make sure to complete all state steps — especially the AG registration, which is often missed by first-time founders.</div>
+    </div>
+
+    <div class="card">
+      <span class="badge b-purple">Illinois-Specific Formation Steps</span>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>File as an Illinois Not-for-Profit Corporation</h4><p>File Articles of Incorporation under the Illinois General Not For Profit Corporation Act (805 ILCS 105). Cost: $50. File at ilsos.gov or in person at 1510 W Market St, Bloomington.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Minimum 3 Directors Required</h4><p>Illinois requires at least 3 directors on your board. They do not need to be Illinois residents but should be trustworthy community members committed to your mission.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Register with the Illinois Attorney General</h4><p>File Form CO-1 with the IL AG Charitable Trust Bureau before soliciting ANY donations. Cost: $15 initial + $15/year renewal. This is required by the Solicitation for Charity Act. Visit illinoisattorneygeneral.gov.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Annual Report to Illinois Secretary of State</h4><p>File an annual report each year before the anniversary of your incorporation. Cost: $10. Required to maintain your active status as an Illinois corporation.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Annual Report to Illinois Attorney General</h4><p>File Form AG990-IL every year once registered with the AG. Due 6 months after your fiscal year end. This is separate from the Secretary of State annual report.</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><h4>Mandatory Reporter Training</h4><p>Illinois law requires anyone working with minors to complete mandated reporter training. All volunteers and staff in your youth programs must complete this before working with children. Free training at dcfstraining.org.</p></div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-body"><h4>Illinois Sales Tax Exemption</h4><p>Once you have 501(c)(3) status, apply for Illinois Sales Tax Exemption with the IL Department of Revenue (Form STAX-1). Saves money on supplies, equipment, and event purchases.</p></div></div>
+    </div>
+
+    <div class="card">
+      <span class="badge b-blue">Helpful Illinois Nonprofit Resources</span>
+      <ul class="plain">
+        <li><strong>Donors Forum / Illinois Nonprofit Principles</strong> — ilnp.org — Free guidance and nonprofit community</li>
+        <li><strong>Illinois Attorney General Charitable Trust Bureau</strong> — illinoisattorneygeneral.gov/charities</li>
+        <li><strong>Illinois Secretary of State Business Services</strong> — ilsos.gov/departments/business_services</li>
+        <li><strong>Prairie State Legal Services</strong> — Free legal help for nonprofits in central Illinois</li>
+        <li><strong>Illinois DCFS Licensing</strong> — If programs involve foster youth, some activities may require DCFS licensing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ COMMUNITY ADVICE ══ -->
+  <div id="community" class="section">
+    <p class="section-intro">Wisdom from women who've built it. Add your own advice for her below — this tool is meant to be shared with your community of nonprofit women.</p>
+
+    <div class="advice-card">
+      <div class="advisor-row"><div class="avatar av-purple">MJ</div><div><div class="advisor-name">Mentor Voice — Executive Director, DV Nonprofit</div><div class="advisor-title">10 years running a domestic violence resource center</div></div></div>
+      <p class="quote">"Start with relationships, not programs. Before you launch anything, spend 3 months just listening — to survivors, to shelter staff, to foster parents. The community will tell you exactly what's missing. Your job is to fill that gap, not create something that already exists."</p>
+    </div>
+
+    <div class="advice-card">
+      <div class="advisor-row"><div class="avatar av-teal">RW</div><div><div class="advisor-name">Mentor Voice — Founder, Youth Services Organization</div><div class="advisor-title">Served foster and runaway youth for 8 years</div></div></div>
+      <p class="quote">"Get your liability and background check policies in place before you work with your first child. One incident without proper protocols can shut down everything you've built. It's not fun paperwork — it's protection for the kids and for you."</p>
+    </div>
+
+    <div class="advice-card">
+      <div class="advisor-row"><div class="avatar av-pink">TA</div><div><div class="advisor-name">Mentor Voice — Nonprofit Attorney</div><div class="advisor-title">Specializes in nonprofit formation and Illinois compliance</div></div></div>
+      <p class="quote">"Don't wait for your 501(c)(3) to start building community. You can operate, raise awareness, and even collect donations through a fiscal sponsor while your application is pending. Those 3–6 months are precious — use them. In Illinois, register with the AG first thing."</p>
+    </div>
+
+    <div class="advice-card">
+      <div class="advisor-row"><div class="avatar av-amber">CP</div><div><div class="advisor-name">Mentor Voice — Grant Writer & Fundraiser</div><div class="advisor-title">Raised $2M+ for women-serving nonprofits in Illinois</div></div></div>
+      <p class="quote">"Track your impact from day one — even if it's just a spreadsheet. How many people did you serve? What changed for them? Funders like Illinois Prairie Community Foundation want data AND stories. Keep both. A grant with a real face and real numbers is almost impossible to ignore."</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="card">
+      <div class="card-title">💬 Share Your Advice</div>
+      <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.75rem;">If you've started a nonprofit or work in the community, share a tip, lesson learned, or resource for her journey.</p>
+      <textarea id="advice-input" placeholder="Your wisdom, tip, or resource for women starting a nonprofit in McLean County..."></textarea>
+      <br><button class="btn-primary" onclick="submitAdvice()">Add Your Wisdom</button>
+      <div id="community-posts"></div>
+    </div>
+  </div>
+
+  <!-- ══ RESOURCES ══ -->
+  <div id="resources" class="section">
+    <div class="card">
+      <span class="badge b-purple">Nonprofit Formation</span>
+      <a class="resource-row" href="https://www.irs.gov/charities-non-profits/charitable-organizations/exemption-requirements-501c3-organizations" target="_blank"><span class="res-icon">🔗</span><span class="res-name">IRS 501(c)(3) Requirements</span><span class="res-domain">irs.gov</span></a>
+      <a class="resource-row" href="https://ilsos.gov/departments/business_services/home.html" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Illinois Secretary of State — Business Services</span><span class="res-domain">ilsos.gov</span></a>
+      <a class="resource-row" href="https://illinoisattorneygeneral.gov/charities/charities_reg.html" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Illinois AG Charitable Trust Registration</span><span class="res-domain">illinoisattorneygeneral.gov</span></a>
+      <a class="resource-row" href="https://candid.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Candid (GuideStar) — Register Your Nonprofit</span><span class="res-domain">candid.org</span></a>
+      <a class="resource-row" href="https://www.councilofnonprofits.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">National Council of Nonprofits</span><span class="res-domain">councilofnonprofits.org</span></a>
+    </div>
+    <div class="card">
+      <span class="badge b-blue">McLean County Local</span>
+      <a class="resource-row" href="http://www.ilprairiecf.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Illinois Prairie Community Foundation</span><span class="res-domain">ilprairiecf.org</span></a>
+      <a class="resource-row" href="https://uwmclean.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">United Way of McLean County</span><span class="res-domain">uwmclean.org</span></a>
+      <a class="resource-row" href="http://www.ywcamclean.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">YWCA McLean County / Labyrinth</span><span class="res-domain">ywcamclean.org</span></a>
+      <a class="resource-row" href="http://www.thebabyfold.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">The Baby Fold (Foster Care, Normal IL)</span><span class="res-domain">thebabyfold.org</span></a>
+      <a class="resource-row" href="http://www.mccainc.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Mid Central Community Action</span><span class="res-domain">mccainc.org</span></a>
+    </div>
+    <div class="card">
+      <span class="badge b-pink">Domestic Violence & Women's Resources</span>
+      <a class="resource-row" href="https://www.thehotline.org/stakeholders/partner-with-us/" target="_blank"><span class="res-icon">🔗</span><span class="res-name">National DV Hotline — Partner With Us</span><span class="res-domain">thehotline.org</span></a>
+      <a class="resource-row" href="https://www.womenslaw.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">WomensLaw.org — Legal Resources</span><span class="res-domain">womenslaw.org</span></a>
+      <a class="resource-row" href="https://www.justice.gov/ovw" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Office on Violence Against Women (VAWA Grants)</span><span class="res-domain">justice.gov</span></a>
+    </div>
+    <div class="card">
+      <span class="badge b-teal">Foster Care & Youth</span>
+      <a class="resource-row" href="https://www.childwelfare.gov" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Child Welfare Information Gateway</span><span class="res-domain">childwelfare.gov</span></a>
+      <a class="resource-row" href="https://www.mentoring.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">MENTOR — Evidence-Based Mentoring Standards</span><span class="res-domain">mentoring.org</span></a>
+      <a class="resource-row" href="https://www.dcfstraining.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">DCFS Mandated Reporter Training (Illinois)</span><span class="res-domain">dcfstraining.org</span></a>
+    </div>
+    <div class="card">
+      <span class="badge b-amber">Free Tools for Nonprofits</span>
+      <a class="resource-row" href="https://www.techsoup.org" target="_blank"><span class="res-icon">🔗</span><span class="res-name">TechSoup — Discounted Software & Tech</span><span class="res-domain">techsoup.org</span></a>
+      <a class="resource-row" href="https://www.canva.com/canva-for-nonprofits/" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Canva for Nonprofits (Free Design)</span><span class="res-domain">canva.com</span></a>
+      <a class="resource-row" href="https://www.google.com/grants/" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Google Ad Grants ($10K/month Free Ads)</span><span class="res-domain">google.com</span></a>
+      <a class="resource-row" href="https://nonprofit.microsoft.com" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Microsoft for Nonprofits</span><span class="res-domain">microsoft.com</span></a>
+      <a class="resource-row" href="https://www.score.org/find-mentor" target="_blank"><span class="res-icon">🔗</span><span class="res-name">SCORE Free Nonprofit Mentorship</span><span class="res-domain">score.org</span></a>
+    </div>
+    <div class="card">
+      <span class="badge b-coral">Grant Databases</span>
+      <a class="resource-row" href="https://www.grants.gov" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Grants.gov — Federal Grants</span><span class="res-domain">grants.gov</span></a>
+      <a class="resource-row" href="https://candid.org/find-funding" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Candid Funding Finder</span><span class="res-domain">candid.org</span></a>
+      <a class="resource-row" href="https://www.icjia.org/grants/" target="_blank"><span class="res-icon">🔗</span><span class="res-name">Illinois Criminal Justice Information Authority (VAWA / state grants)</span><span class="res-domain">icjia.org</span></a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Created with ❤️ for women building community in <strong>McLean County, Illinois</strong>.</p>
+  <p style="margin-top:6px;">Share this tool with nonprofit women in your network. Together you rise.</p>
+</footer>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function submitAdvice() {
+  const val = document.getElementById('advice-input').value.trim();
+  if (!val) return;
+  const container = document.getElementById('community-posts');
+  const post = document.createElement('div');
+  post.className = 'community-post';
+  post.innerHTML = `
+    <div class="post-header">
+      <div class="post-you">You</div>
+      <span class="post-name">Community Member</span>
+    </div>
+    <p class="post-text">${val.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+  `;
+  container.prepend(post);
+  document.getElementById('advice-input').value = '';
+}
+
+// Save checklist state to localStorage
+document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+  const saved = localStorage.getItem(cb.id);
+  if (saved === 'true') cb.checked = true;
+  cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked));
+});
+</script>
+</body>
+</html>
